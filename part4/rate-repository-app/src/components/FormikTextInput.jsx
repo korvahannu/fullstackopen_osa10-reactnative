@@ -16,14 +16,22 @@ const styles = StyleSheet.create({
   }
 });
 
-const FormikTextInput = ({name, ...props}) => {
+const FormikTextInput = ({name, multiline, testID, ...props}) => {
 
   const [field, meta, helpers] = useField(name);
   const showError = meta.touched && meta.error;
 
+  let multi = false;
+
+  if(multiline !== null && multiline !== undefined)
+    multi=true;
+
+  if(testID === undefined || testID === null)
+    testID="default";
+
   return(
     <>
-      <TextInput onChangeText={value => helpers.setValue(value)} onBlur={()=> helpers.setTouched(true)} value={field.value} error={showError} {...props} />
+      <TextInput multiline={multi} testID={testID} onChangeText={value => helpers.setValue(value)} onBlur={()=> helpers.setTouched(true)} value={field.value} error={showError} {...props} />
       
       {showError && <Text style={styles.errorText}>{meta.error}</Text>}
     </>

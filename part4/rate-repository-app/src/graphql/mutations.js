@@ -7,3 +7,35 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const ADD_REVIEW  = gql`
+  mutation addReview ($ownerName: String!, $repositoryName: String!, $rating:Int!, $text:String) {
+
+    createReview(review:{repositoryName:$repositoryName, ownerName:$ownerName, rating:$rating, text:$text}) {
+      repositoryId
+    }
+
+  }
+`;
+
+export const SIGN_UP = gql`
+
+  mutation signup ($username: String!, $password: String!) {
+
+    createUser(user:{username:$username, password:$password}) {
+
+      id
+
+    }
+
+  }
+
+`;
+
+
+/*
+ownerName: zeit
+name: next.js
+rating:
+text
+*/

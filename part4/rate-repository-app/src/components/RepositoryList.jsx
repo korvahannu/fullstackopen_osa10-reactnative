@@ -1,44 +1,57 @@
-import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
-import RepositoryItem from './RepositoryItem';
-import theme from '../theme';
-import useRepositories from '../hooks/useRepositories';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import Text from './Text';
-
-const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-  },
-  myFlex: theme.repositoryList
-});
-const ItemSeparator = () => <View style={styles.separator} />;
+import { RepositoryListContainer } from './RepositoryListContainer';
+import useRepositories from '../hooks/useRepositories';
+import { useDebouncedCallback } from 'use-debounce';
 
 const RepositoryList = () => {
 
   const { repositories } = useRepositories();
+  const [sort, setSort] = useState("latest");
+  const [filter, setFilter] = useState("");
+  
+
+  const debounce = useDebouncedCallback(
+    (value) => {
+      if(sort==="latest") 
+        refetch("CREATED_AT", "DESC", value);
+      else if (sort==="highest")
+        sort("RATING_AVERAGE", "DESC", value);
+      else if (sort==="lowest")
+        sort("RATING_AVERAGE", "ASC", value);
+    },
+    500
+  );
+
 
   if(repositories.loading)
     return <View><Text>Loading...</Text></View>
 
-  const respositoryNodes = repositories
-  ? repositories.data.repositories.edges.map(edge => edge.node)
-  : [];
+  if(repositories.loading)
+    return <View><Text>Loading...</Text></View>
 
 
-  const renderItem = ({item}) => (
-    <RepositoryItem key={item.id} item={item} />
-  );
+  const sortBy = (value) => {
+    setSort(value);
+    if(value==="latest") 
+      refetch("CREATED_AT", "DESC");
+    else if (value==="highest")
+      refetch("RATING_AVERAGE", "DESC");
+    else if (value==="lowest")
+      refetch("RATING_AVERAGE", "ASC");
+  }
 
-  return (
-    <View style={styles.myFlex}>
-      <FlatList
-        data={respositoryNodes}
-        ItemSeparatorComponent={ItemSeparator}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </View>
-  );
+  const refetch = (orderBy, orderDirection, searchKeyword) => {
+    repositories.refetch({orderBy, orderDirection, searchKeyword});
+  };
+
+  const onFilterChange = (filter) => {
+    setFilter(filter);
+    debounce(filter);
+  };
+
+  return <RepositoryListContainer onFilterChange={onFilterChange} sortBy={sortBy} repositories={repositories.data} currentSort={sort} />;
 };
 
 export default RepositoryList;

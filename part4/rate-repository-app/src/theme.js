@@ -71,10 +71,55 @@ const theme = {
   },
   button: {
     height:64, color:'white', backgroundColor:'#0366d6', fontSize:24, borderRadius:8,
-    textAlign:'center'
+    textAlign:'center',
+    marginTop:16,
+    marginLeft:32,
+    marginRight:32
   },
   buttonText: {
     fontSize:24, color:'white', paddingTop:16, marginLeft:'auto', marginRight:'auto'
+  },
+  review: {
+    backgroundColor:'white',
+    padding:16,
+    marginTop:12,
+    paddingRight:64,
+  },
+  reviewBall: {
+    width:42,
+    height:42,
+    borderRadius:21,
+    fontSize:24,
+    color:'#0366d6',
+    alignItems:'center',
+    justifyContent:'center',
+    borderLeftWidth:2,
+    borderRightWidth:2,
+    borderTopWidth:2,
+    borderBottomWidth:2,
+    borderColor:'#0366d6',
+    borderStyle:'solid',
+    marginRight:16
+  },
+  formHeader: {
+    marginLeft:32,
+    fontWeight:'bold',
+    fontSize:24,
+    marginTop:8,
+    fontStyle:'italic'
+  },
+  textinput: {
+    backgroundColor:'white',
+    borderLeftWidth:2,
+    borderRightWidth:2,
+    borderTopWidth:2,
+    borderBottomWidth:2,
+    borderColor:'#0366d6',
+    borderStyle:'solid',
+    width:'90%',
+    margin:16,
+    height:64,
+    padding:16
   }
 };
 

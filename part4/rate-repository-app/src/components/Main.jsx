@@ -7,6 +7,9 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-native';
 import SignIn from './SignIn';
 import { useApolloClient } from '@apollo/client';
 import useAuthStorage from '../hooks/useAuthStorage';
+import ViewRepository from './ViewRepository';
+import NewReview from './NewReview';
+import SignUp from './SignUp';
 
 const styles = StyleSheet.create({
   main: {
@@ -37,10 +40,21 @@ const Main = () => {
           <RepositoryList />
         </Route>
 
+        <Route path="/repositories/:id">
+            <ViewRepository />
+        </Route>
+
         <Route path="/signIn" exact>
           <SignIn />
         </Route>
 
+        <Route path="/signUp" exact>
+          <SignUp />
+        </Route>
+
+        <Route path="/newReview" exact>
+          <NewReview />
+        </Route>
 
         <Redirect to ="/" />
       </Switch>

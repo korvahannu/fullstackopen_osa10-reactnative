@@ -34,6 +34,19 @@ const AppBar = ({logOut}) => {
     <View style={styles.appBar}>
       <ScrollView horizontal>
           <AppBarTab title="Repositories" link="/" onClick={onClick}/>
+
+          {
+            authorizedUser.data === undefined || authorizedUser.data.authorizedUser === null
+            ? null
+            : <AppBarTab title="Create a review" link="/newReview" onClick={onClick}/>
+          }
+
+          {
+            authorizedUser.data !== undefined && authorizedUser.data.authorizedUser !== null
+            ? null
+            : <AppBarTab title="Sign up" link="/signUp" onClick={onClick}/>
+          }
+
           {
             authorizedUser.data === undefined || authorizedUser.data.authorizedUser === null
             ? <AppBarTab title="Sign in" link="/signIn" onClick={onClick}/>

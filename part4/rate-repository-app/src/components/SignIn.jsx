@@ -17,35 +17,38 @@ const validationSchema = yup.object().shape({
   .required('Password is required'),
 });
 
-const SignIn = () => {
-
-  const [signIn] = useSignIn();
-
+export const SignInForm = ({onSubmit}) => {
 
   const initialValues = {
     username: '',
     password: ''
   };
 
+  return (
+    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+    {({handleSubmit}) => {
+      return(
+        <View>
+          <FormikTextInput name="username" style={theme.textField} testID="fieldUsername" />
+          <FormikTextInput name="password" secureTextEntry style={theme.textField} testID="fieldPassword" />
+          <Pressable type="submit" onPress={handleSubmit} style={theme.button} testID="submitButton"><Text style={theme.buttonText}>Sign in</Text></Pressable>
+        </View>
+      );
+      }}
+    </Formik>
+  );
+};
+
+const SignIn = () => {
+
+  const [signIn] = useSignIn();
+
   const onSubmit = (values) => {
     const {username, password} = values;
     signIn({ username, password });
   };
 
-  return (
-    
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-      {({handleSubmit}) => {
-        return(
-          <View>
-            <FormikTextInput name="username" style={theme.textField} />
-            <FormikTextInput name="password" secureTextEntry style={theme.textField}/>
-            <Pressable type="submit" onPress={handleSubmit} style={theme.button}><Text style={theme.buttonText}>Sign in</Text></Pressable>
-          </View>
-        );
-        }}
-    </Formik>
-  );
+  return <SignInForm onSubmit={onSubmit} />;
 };
 
 export default SignIn;
