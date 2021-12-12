@@ -7,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 const RepositoryList = () => {
 
-  const { repositories } = useRepositories();
+  const { repositories, loading, refetch, error } = useRepositories();
   const [sort, setSort] = useState("latest");
   const [filter, setFilter] = useState("");
   
@@ -15,35 +15,33 @@ const RepositoryList = () => {
   const debounce = useDebouncedCallback(
     (value) => {
       if(sort==="latest") 
-        refetch("CREATED_AT", "DESC", value);
+        fetchAgain("CREATED_AT", "DESC", value);
       else if (sort==="highest")
-        sort("RATING_AVERAGE", "DESC", value);
+        fetchAgain("RATING_AVERAGE", "DESC", value);
       else if (sort==="lowest")
-        sort("RATING_AVERAGE", "ASC", value);
+        fetchAgain("RATING_AVERAGE", "ASC", value);
     },
     500
   );
 
-
-  if(repositories.loading)
+  if(loading)
     return <View><Text>Loading...</Text></View>
 
-  if(repositories.loading)
-    return <View><Text>Loading...</Text></View>
-
-
+  if(error)
+    console.log(error.message);
+  
   const sortBy = (value) => {
     setSort(value);
     if(value==="latest") 
-      refetch("CREATED_AT", "DESC");
+      fetchAgain("CREATED_AT", "DESC");
     else if (value==="highest")
-      refetch("RATING_AVERAGE", "DESC");
+      fetchAgain("RATING_AVERAGE", "DESC");
     else if (value==="lowest")
-      refetch("RATING_AVERAGE", "ASC");
+      fetchAgain("RATING_AVERAGE", "ASC");
   }
 
-  const refetch = (orderBy, orderDirection, searchKeyword) => {
-    repositories.refetch({orderBy, orderDirection, searchKeyword});
+  const fetchAgain = (orderBy, orderDirection, searchKeyword) => {
+    refetch({orderBy, orderDirection, searchKeyword});
   };
 
   const onFilterChange = (filter) => {
@@ -51,7 +49,7 @@ const RepositoryList = () => {
     debounce(filter);
   };
 
-  return <RepositoryListContainer onFilterChange={onFilterChange} sortBy={sortBy} repositories={repositories.data} currentSort={sort} />;
+  return <View><RepositoryListContainer onFilterChange={onFilterChange} sortBy={sortBy} repositories={repositories} currentSort={sort} /></View>;
 };
 
 export default RepositoryList;

@@ -1,64 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const GET_REPOSITORIES = gql`
-  query {
-    repositories (orderBy:CREATED_AT) {
-      edges {
-        node {
-          id
-          ownerName,
-          description,
-          language,
-          stargazersCount,
-          forksCount,
-          ratingAverage,
-          reviewCount,
-          ownerAvatarUrl
-        }
-      }
-    }
-  }
-`;
-
-export const GET_REPOSITORIES_HIGHEST_TO_LOWEST = gql`
-query {
-  repositories (orderBy:RATING_AVERAGE) {
-    edges {
-      node {
-        id
-        ownerName,
-        description,
-        language,
-        stargazersCount,
-        forksCount,
-        ratingAverage,
-        reviewCount,
-        ownerAvatarUrl
-      }
-    }
-  }
-}
-`;
-
-export const GET_REPOSITORIES_LOWEST_TO_HIGHEST = gql`
-query {
-  repositories (orderBy:RATING_AVERAGE, orderDirection:ASC) {
-    edges {
-      node {
-        id
-        ownerName,
-        description,
-        language,
-        stargazersCount,
-        forksCount,
-        ratingAverage,
-        reviewCount,
-        ownerAvatarUrl
-      }
-    }
-  }
-}`;
-
 export const GET_REPO_FILTER = gql`
 query ($orderBy:AllRepositoriesOrderBy, $orderDirection:OrderDirection, $searchKeyword:String) {
   repositories (orderBy:$orderBy, orderDirection:$orderDirection, searchKeyword:$searchKeyword) {
@@ -79,17 +20,60 @@ query ($orderBy:AllRepositoriesOrderBy, $orderDirection:OrderDirection, $searchK
 }`;
 
 export const GET_CURRENT_AUTHORIZED_USER = gql`
+query ($includeReviews: Boolean = false) { 
+  authorizedUser {
+    id,
+    username
+    reviews @include(if: $includeReviews) {
+      edges {
+        node {
+          id,
+          text,
+          repository {
+            id,
+          },
+          rating,
+          createdAt,
+          user {
+            id,
+            username,
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
+export const GET_CURRENT_AUTHORIZED_USER_WITH_REVIEWS = gql`
 query { 
   authorizedUser {
     id,
     username
+    reviews {
+      edges {
+        node {
+          id,
+          text,
+          repository {
+            id,
+          },
+          rating,
+          createdAt,
+          user {
+            id,
+            username,
+          }
+        }
+      }
+    }
   }
 }
 `;
 
 export const GET_REPOSITORY_BY_ID = gql`
 
-  query repositoryById($repositoryId:ID!) {
+  query repositoryById($repositoryId:ID!, $after:String, $first:Int) {
     
     repository(id:$repositoryId) {
       ownerName,
@@ -101,7 +85,12 @@ export const GET_REPOSITORY_BY_ID = gql`
       reviewCount,
       ratingAverage,
       url,
-      reviews {
+      reviews (first:$first, after:$after) {
+        pageInfo {
+          endCursor,
+          startCursor,
+          hasNextPage,
+        },
         edges {
           node {
             id

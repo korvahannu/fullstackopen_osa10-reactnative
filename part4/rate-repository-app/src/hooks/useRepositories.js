@@ -1,11 +1,9 @@
 import { useQuery } from '@apollo/client';
-import { GET_REPOSITORIES, GET_REPOSITORIES_HIGHEST_TO_LOWEST, GET_REPOSITORIES_LOWEST_TO_HIGHEST, GET_REPO_FILTER } from '../graphql/queries';
-import { useLazyQuery } from '@apollo/client';
-import { useEffect } from 'react';
+import { GET_REPO_FILTER } from '../graphql/queries';
 
 const useRepositories = () => {
 
-  const repositories = useQuery(GET_REPO_FILTER, {
+  const { data, loading, refetch, error, ...result } = useQuery(GET_REPO_FILTER, {
     fetchPolicy:"cache-and-network",
     variables : {
       orderBy:"CREATED_AT",
@@ -13,7 +11,13 @@ const useRepositories = () => {
     }
   });
 
-  return  { repositories };
+  return  {
+    repositories: data?.repositories,
+    loading,
+    refetch,
+    error,
+    ...result
+    };
 };
 
 export default useRepositories;

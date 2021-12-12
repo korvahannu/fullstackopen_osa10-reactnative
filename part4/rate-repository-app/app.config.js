@@ -6,10 +6,6 @@ export default {
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
-  packageOpts: {
-    sourceExts: [ "js", "json", "ts", "tsx", "jsx" ], 
-    config: "metro.config.js",
-  },
   splash: {
     image: "./assets/splash.png",
     resizeMode: "contain",

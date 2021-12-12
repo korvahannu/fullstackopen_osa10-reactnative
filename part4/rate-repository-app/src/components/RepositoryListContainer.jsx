@@ -28,7 +28,7 @@ export class RepositoryListContainer extends React.Component {
     const ItemSeparator = () => <View style={styles.separator} />;
 
     const respositoryNodes = props.repositories
-    ? props.repositories.repositories.edges.map(edge => edge.node)
+    ? props.repositories.edges.map(edge => edge.node)
     : [];
 
     const renderItem = ({item}) => (

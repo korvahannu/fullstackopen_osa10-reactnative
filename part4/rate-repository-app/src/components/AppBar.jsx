@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, Pressable} from 'react-native';
 import theme from "../theme";
 import AppBarTab from "./AppBarTab";
@@ -39,6 +39,12 @@ const AppBar = ({logOut}) => {
             authorizedUser.data === undefined || authorizedUser.data.authorizedUser === null
             ? null
             : <AppBarTab title="Create a review" link="/newReview" onClick={onClick}/>
+          }
+
+          {
+            authorizedUser.data === undefined || authorizedUser.data.authorizedUser === null
+            ? null
+            : <AppBarTab title="My reviews" link="/myReviews" onClick={onClick}/>
           }
 
           {

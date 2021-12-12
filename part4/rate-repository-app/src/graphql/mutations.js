@@ -32,6 +32,16 @@ export const SIGN_UP = gql`
 
 `;
 
+export const DELETE_REVIEW = gql`
+
+  mutation deletereview ($id: ID!) {
+
+    deleteReview(id:$id) 
+
+  }
+
+`;
+
 
 /*
 ownerName: zeit

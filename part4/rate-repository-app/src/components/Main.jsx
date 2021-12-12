@@ -10,6 +10,7 @@ import useAuthStorage from '../hooks/useAuthStorage';
 import ViewRepository from './ViewRepository';
 import NewReview from './NewReview';
 import SignUp from './SignUp';
+import MyReviews from './MyReviews';
 
 const styles = StyleSheet.create({
   main: {
@@ -54,6 +55,10 @@ const Main = () => {
 
         <Route path="/newReview" exact>
           <NewReview />
+        </Route>
+
+        <Route path="/myReviews" exact>
+          <MyReviews />
         </Route>
 
         <Redirect to ="/" />

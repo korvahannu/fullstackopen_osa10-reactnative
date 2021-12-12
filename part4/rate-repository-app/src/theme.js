@@ -120,6 +120,22 @@ const theme = {
     margin:16,
     height:64,
     padding:16
+  },
+  smallButton: {
+    height:40, color:'white', backgroundColor:'#0366d6', fontSize:16, borderRadius:8,
+    textAlign:'center',
+    marginTop:16,
+    padding:8
+  },
+  smallButtonRed: {
+    height:40, color:'white', backgroundColor:'red', fontSize:16, borderRadius:8,
+    textAlign:'center',
+    marginTop:16,
+    padding:8
+  },
+  smallButtonText: {
+    fontSize:16, color:'white', marginLeft:'auto', marginRight:'auto',
+    fontWeight:'bold'
   }
 };
 

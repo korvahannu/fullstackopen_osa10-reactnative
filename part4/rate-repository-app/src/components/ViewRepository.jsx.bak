@@ -16,15 +16,14 @@ const ViewRepository = () => {
 
   const response = useQuery(GET_REPOSITORY_BY_ID, {
     variables: {
-      repositoryId: id
+      repositoryId: id,
+      first: 6
     },
     fetchPolicy:'cache-and-network'
   });
 
   if(response.loading)
     return <View><Text>Loading repository, please wait ...</Text></View>;
-  
-  console.log(params);
 
   const repository = response.data.repository;
   const reviews = repository.reviews.edges;
@@ -33,13 +32,29 @@ const ViewRepository = () => {
     Linking.openURL(repository.url)
   };
 
+  const onEndReach = () => {
+
+    if(response.loading || !response.data?.repository.reviews.pageInfo.hasNextPage)
+      return console.log("Can't load any more reviews my friend!");
+
+    console.log("Loaded new reviews!");
+
+    response.fetchMore({
+      after: response.data.repository.reviews.pageInfo.endCursor,
+      ...variables
+    });
+
+  };
+
   return(
     <View>
       <FlatList
         data={reviews}
         renderItem={({item}) => <ReviewItem review={item.node} />}
         keyExtractor={(item, index) => index.toString()}
-        ListHeaderComponent={() => <RepositoryInfo repository={repository} openRepositoryGithub={OpenRepository} />}
+        ListHeaderComponent={() => <RepositoryInfo repository={repository} onClick={OpenRepository} />}
+        onEndReachedThreshold={0.5}
+        onEndReached={onEndReach}
       />
     </View>
   );
@@ -58,10 +73,10 @@ const ReviewItem = ({review}) => (
   </View>
 );
 
-const RepositoryInfo = ({repository, openRepositoryGithub}) => (
+const RepositoryInfo = ({repository, onClick}) => (
   <View>
       <RepositoryItemContent item={repository} viewRepository={null} />
-      <Pressable type="submit" onPress={openRepositoryGithub} style={theme.button}><Text style={theme.buttonText}>Open in GitHub</Text></Pressable>
+      <Pressable type="submit" onPress={onClick} style={theme.button}><Text style={theme.buttonText}>Open in GitHub</Text></Pressable>
   </View>
 );
 
